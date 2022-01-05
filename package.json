@@ -4,9 +4,7 @@
   "description": "",
   "main": "scrape.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "vercel dev",
-    "deploy": "vercel deploy --prod"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +16,8 @@
     "https": "^1.0.0",
     "node-telegram-bot-api": "^0.56.0",
     "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "@vercel/node": "^1.12.1"
   }
 }
