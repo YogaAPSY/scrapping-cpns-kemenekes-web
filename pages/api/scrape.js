@@ -5,7 +5,8 @@ const TelegramBot = require('node-telegram-bot-api')
 const fs = require('fs');
 process.env.NTBA_FIX_319 = 1;
 
-request({url : 'http://casn.kemkes.go.id/Cpns/pengumuman.html',  "rejectUnauthorized": false}, (error, response, html) => { 
+export default function handler(request, response) {
+    request({url : 'http://casn.kemkes.go.id/Cpns/pengumuman.html',  "rejectUnauthorized": false}, (error, response, html) => { 
     if(!error ){
         const $ = cheerio.load(html);
 
@@ -85,3 +86,4 @@ request({url : 'http://casn.kemkes.go.id/Cpns/pengumuman.html',  "rejectUnauthor
         bot.sendMessage('-1001791902476', error);
     }
 })
+}
