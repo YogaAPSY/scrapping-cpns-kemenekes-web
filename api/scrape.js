@@ -1,7 +1,9 @@
-const request = require('request')
-const cheerio = require('cheerio')
-const notification = require('./telegram')
+const request = require('request');
+const cheerio = require('cheerio');
+const notification = require('./telegram');
 const fileManagment = require('./file');
+const pastebin = require('./pastebin');
+const database = require('./database');
 
 process.env.NTBA_FIX_319 = 1;
 
@@ -10,7 +12,7 @@ module.exports = (req,res) => {
         try{
             return request({url : 'http://casn.kemkes.go.id/Cpns/pengumuman.html',  "rejectUnauthorized": false},async (error, response, html) => {
             if(!error ){
-                const $ = cheerio.load(html);
+            const $ = cheerio.load(html);
 
             const tbody = $('body > div.wrapper > div.fact > div > div > div > div.table100-body.js-pscroll > table > tbody > tr');
 
@@ -19,10 +21,10 @@ module.exports = (req,res) => {
                     total = i;
                 })
                 
-                const path = './input.json';
-                const dateNow = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-                if (fileManagment.existFile(path)) {
-                let lastTotalRow = fileManagment.totalRow('input.json');
+                // const dateNow = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+                const lastTotalRow = await database.getTotal();
+
+                if (lastTotalRow) {
 
                 if(total != lastTotalRow){
                     const tanggal = $('body > div.wrapper > div.fact > div > div > div > div.table100-body.js-pscroll > table > tbody > tr:nth-child(1) > td.cell100.column1').text();
@@ -32,7 +34,7 @@ module.exports = (req,res) => {
                     let textAlert = '';
                     let diff = total - lastTotalRow;
 
-                    fileManagment.writeFileJson(total,dateNow)
+                    await database.editTotal(total)
 
                     if(diff > 1){
                         tbody.each(function(i, result){
@@ -60,7 +62,7 @@ module.exports = (req,res) => {
                 }
 
                 }else{
-                    fileManagment.writeFileJson(total,dateNow)
+                    await database.setTotal(total)
                 }
             }else{
                 await notification.sendNotification(error)
@@ -77,7 +79,7 @@ module.exports = (req,res) => {
             res.json({
             'status' : false,
             'code' : 500,
-            'message' : '',
+            'message' : e,
             'data' : []
             })
         }

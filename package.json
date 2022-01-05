@@ -14,7 +14,9 @@
     "cheerio": "^1.0.0-rc.10",
     "fs": "^0.0.1-security",
     "https": "^1.0.0",
+    "mongoose": "^6.1.5",
     "node-telegram-bot-api": "^0.56.0",
+    "pastebin-ts": "^1.2.0",
     "request": "^2.88.2"
   },
   "devDependencies": {
