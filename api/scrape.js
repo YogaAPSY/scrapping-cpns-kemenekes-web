@@ -14,19 +14,19 @@ module.exports = (req,res) => {
             if(!error ){
             const $ = cheerio.load(html);
 
-            const tbody = $('body > div.wrapper > div.fact > div > div > div > div.table100-body.js-pscroll > table > tbody > tr');
+            const tbody = $('body > div.wrapper > div.fact > div > div > b > font > div > div.table100-body.js-pscroll > table > tbody > tr');
 
             let total = 0;
                 tbody.each(function(i, result){
                     total = i;
                 })
-                
+
                 // const dateNow = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
                 const lastTotalRow = await database.getTotal();
 
                 if (lastTotalRow) {
 
-                if(total != lastTotalRow){
+                if(total > lastTotalRow){
                     const tanggal = $('body > div.wrapper > div.fact > div > div > div > div.table100-body.js-pscroll > table > tbody > tr:nth-child(1) > td.cell100.column1').text();
                         const namaFile = $('body > div.wrapper > div.fact > div > div > div > div.table100-body.js-pscroll > table > tbody > tr:nth-child(1) > td.cell100.column2').text();
                         const linkFile = $('body > div.wrapper > div.fact > div > div > div > div.table100-body.js-pscroll > table > tbody > tr:nth-child(1) > td.cell100.column3 > a').attr('href');
